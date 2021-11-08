@@ -16,7 +16,13 @@ const http = require('http').Server(app);
 const fs = require('fs');
 const crypto = require('crypto')
 const multer = require('multer');
+var cors = require('cors')
 const storege_dir = __dirname + '/data'
+
+// Configurando o express
+app.use(express.json())
+app.use(express.urlencoded())
+app.use(cors())
 
 // Cria as pastas para o funcionamento da aplicação
 if (!fs.existsSync(storege_dir)){
@@ -35,10 +41,6 @@ const storege = multer.diskStorage({
         cb(null, file.originalname)
     }
 })
-
-// Preparando para usar o metodo POST
-app.use(express.json());
-app.use(express.urlencoded());
 
 // Enviar arquivos para o storege
 app.post('/upload', multer({ storage: storege }).array('file'), (req, res) => {
